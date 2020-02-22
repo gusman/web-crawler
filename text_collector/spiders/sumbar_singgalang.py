@@ -2,7 +2,7 @@ import scrapy
 
 class SinggalangSpider(scrapy.Spider):
     stop_flag = False
-    name = "singgalang"
+    name = "sumbar_singgalang"
     start_urls = [
         'https://hariansinggalang.co.id/',
     ]
