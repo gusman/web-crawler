@@ -90,9 +90,8 @@ AUTOTHROTTLE_TARGET_CONCURRENCY = 1.0
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 
-
 # Scrapy Splash configuration
-#SPLASH_URL = 'http://192.168.59.103:8050'
+#SPLASH_URL = 'http://52.163.203.50:8050'
 #DOWNLOADER_MIDDLEWARES = {
 #    'scrapy_splash.SplashCookiesMiddleware': 723,
 #    'scrapy_splash.SplashMiddleware': 725,
@@ -103,3 +102,14 @@ AUTOTHROTTLE_TARGET_CONCURRENCY = 1.0
 #}
 #DUPEFILTER_CLASS = 'scrapy_splash.SplashAwareDupeFilter'
 #HTTPCACHE_STORAGE = 'scrapy_splash.SplashAwareFSCacheStorage'
+
+
+# Scrapy Selenium configuration
+from shutil import which
+
+SELENIUM_DRIVER_NAME = 'chrome'
+SELENIUM_DRIVER_EXECUTABLE_PATH = which('chromedriver')
+SELENIUM_DRIVER_ARGUMENTS=['-headless']  # '--headless' if using chrome instead of firefox
+DOWNLOADER_MIDDLEWARES = {
+    'scrapy_selenium.SeleniumMiddleware': 800
+}

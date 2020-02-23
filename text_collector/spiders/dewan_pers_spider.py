@@ -1,21 +1,81 @@
 import scrapy
+from time import sleep
+from scrapy_selenium import SeleniumRequest
+from selenium.webdriver.support.ui import Select
+from selenium.webdriver import ActionChains
 
 class QuotesSpider(scrapy.Spider):
     name = "dewan_pers"
     start_urls = [
         'https://dewanpers.or.id/data/perusahaanpers',
     ]
+    list_links = []
+
+    def start_requests(self):
+        for url in self.start_urls:
+            yield SeleniumRequest(url=url, callback=self.parse_initial)
+
+    def parse_initial(self, response):
+        driver = response.request.meta['driver']
+        
+        el_select = driver.find_element_by_name("provinsi")
+        Select(el_select).select_by_visible_text("Sumatera Barat")
+        sleep(2)
+
+        el_select = driver.find_element_by_name("status")
+        Select(el_select).select_by_visible_text("Terverifikasi Administrasi & Faktual")
+        sleep(2)
+
+        el_filter = driver.find_element_by_xpath('//button[@id="btn-filter"]')
+        ActionChains(driver).move_to_element(el_filter).click().perform()
+        sleep(2)
+        
+        el_select = driver.find_element_by_name("data1_length")
+        Select(el_select).select_by_visible_text("10")
+        print("\n\n ------------ SELECT ACTION ----------------")
+        sleep(5)
+
+        while (1):
+            rows = driver.find_elements_by_xpath("//tr[@role='row']")
+            if 1 != self.parse_rows(driver, rows, 10):
+                break;
+    
+        print("LEN: ", len (self.list_links))
+        print(self.list_links)
+
+    def parse_rows(self, driver, rows, n_row):
+        if 1 < len(rows):
+            for row in rows:
+                data = row.find_elements_by_xpath('.//td')
+                print ([ d.text for d in data ])
+                cols = row.find_elements_by_xpath('.//a')
+                self.list_links.extend([ col.text for col in cols ])
+            
+            if 0 != (len(self.list_links) % n_row):
+                print(">> Ends loop no next page")
+                return 0
+            
+            try:
+                el_next = driver.find_element_by_link_text("Next")
+                ActionChains(driver).move_to_element(el_next).click().perform()
+                sleep(5)
+            except Exception as e: 
+                print('>> EXCEPTION: '+ str(e))
+                return 0
+            return 1
+        else:
+            return 0
 
     def parse(self, response):
-        for quote in response.css('div.quote'):
-            yield {
-                'text': quote.css('span.text::text').get(),
-                'author': quote.css('small.author::text').get(),
-                'tags': quote.css('div.tags a.tag::text').getall(),
-            }
+        print("PARSING....")
+        for row in response.selector.xpath('//*'):
+            print(row.getall())
 
-        next_page = response.css('li.next a::attr(href)').get()
-        print("Next Page: " + next_page)
-        if next_page is not None:
-            next_page = response.urljoin(next_page)
-            yield scrapy.Request(next_page, callback=self.parse)
+
+
+#        for row in response.xpath('//tr[@role="row"]'):
+#            lst_media  = row.xpath('.//td/text()').getall()
+#            link_media = row.xpath('.//a/text()').get()
+#            lst_media.append(link_media)
+#            print (lst_media)
+##
