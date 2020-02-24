@@ -18,9 +18,9 @@ class SinggalangSpider(scrapy.Spider):
             #    self.stop_flag = True
             yield scrapy.Request(links, callback=self.parse_article_page)
 
-        if (False == self.stop_flag):
-            next_url = response.xpath('//a[@class="next page-numbers"]/@href').get();
-            yield scrapy.Request(next_url, callback=self.parse)
+        #if (False == self.stop_flag):
+        next_url = response.xpath('//a[@class="next page-numbers"]/@href').get();
+        yield scrapy.Request(next_url, callback=self.parse)
 
     def parse_article_page(self, response):
         title = response.xpath('//h1[@itemprop="headline"]/text()').get()
