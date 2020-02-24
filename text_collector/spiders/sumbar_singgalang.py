@@ -1,7 +1,7 @@
 import scrapy
 
 class SinggalangSpider(scrapy.Spider):
-    stop_flag = False
+    #stop_flag = False
     name = "sumbar_singgalang"
     start_urls = [
         'https://hariansinggalang.co.id/',
@@ -14,9 +14,8 @@ class SinggalangSpider(scrapy.Spider):
             links = article.xpath('.//a/@href').get()
             time = article.xpath('.//time/@datetime').get()
            
-            if time.startswith("2018"):
-                self.stop_flag = True
-
+            #if time.startswith("2018"):
+            #    self.stop_flag = True
             yield scrapy.Request(links, callback=self.parse_article_page)
 
         if (False == self.stop_flag):
