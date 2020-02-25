@@ -36,6 +36,6 @@ class SinggalangSpider(CrawlSpider):
         item = ItemNews()
         item['title'] = response.xpath('//h1[@class="entry-title"]/text()').get()
         item['date'] = response.xpath('//time[@class="entry-date updated td-module-date"]/text()').get()
-        content = response.xpath('//div[@class="td-post-content"]//p/text()').getall()
+        content = response.xpath('//article//p//text()').getall()
         item['content']  = "".join(content)
         yield item
