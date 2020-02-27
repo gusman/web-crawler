@@ -4,7 +4,7 @@ from scrapy_selenium import SeleniumRequest
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver import ActionChains
 
-class QuotesSpider(scrapy.Spider):
+class DewanPersSpider(scrapy.Spider):
     name = "dewan_pers"
     start_urls = [
         'https://dewanpers.or.id/data/perusahaanpers',

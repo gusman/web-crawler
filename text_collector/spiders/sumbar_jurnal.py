@@ -8,7 +8,7 @@ class ItemNews(scrapy.Item):
     title = scrapy.Field()
     content = scrapy.Field()
 
-class SinggalangSpider(CrawlSpider):
+class JurnalSumbarSpider(CrawlSpider):
     stop_flag = False
     name = "sumbar_jurnal"
     allowed_domains = [ 'jurnalsumbar.com' ]

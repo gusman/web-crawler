@@ -8,7 +8,7 @@ class ItemNews(scrapy.Item):
     title = scrapy.Field()
     content = scrapy.Field()
 
-class SinggalangSpider(CrawlSpider):
+class HarianRakyatAcehSpider(CrawlSpider):
     stop_flag = False
     name = "aceh_harianrakyat"
     allowed_domains = [ 'harianrakyataceh.com' ]
