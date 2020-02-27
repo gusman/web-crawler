@@ -9,6 +9,7 @@ class ItemNews(scrapy.Item):
     date = scrapy.Field()
     title = scrapy.Field()
     content = scrapy.Field()
+#    url = scrapy.Field()
 
 class TribunAcehSpider(scrapy.Spider):
     stop_flag = False
@@ -16,7 +17,8 @@ class TribunAcehSpider(scrapy.Spider):
     allowed_domains = [ 'aceh.tribunnews.com' ]
     start_urls = [
         #'https://aceh.tribunnews.com',
-        'https://aceh.tribunnews.com/indeks',
+        #'https://aceh.tribunnews.com/indeks',
+        'https://aceh.tribunnews.com/index-news?date=2020-2-27'
     ]
     
     def parse(self, response):
@@ -31,11 +33,11 @@ class TribunAcehSpider(scrapy.Spider):
         self.logger.info('\n >> n_news : %d\n', n_news)
         if 0 < n_news:
             """ Scrap all news lsit """
-            news_urls = response.xpath('//ul[@class="lsi"]/li[@class="ptb15"]//a/@href');
+            news_urls = response.xpath('//ul[@class="lsi"]/li[@class="ptb15"]//h3//a/@href');
             for news_url in news_urls:
                 """ Get news url """
-                self.logger.info('\n >> PROCESSING in parse_detail %s\n', response.url)
                 url = news_url.get()
+                self.logger.info('\n >> PROCESSING in scrapy request %s\n', url)
                 yield scrapy.Request(url, callback=self.parse_news_page)
 
             self.logger.info('\n >> next url : %s\n', next_url)
@@ -47,6 +49,7 @@ class TribunAcehSpider(scrapy.Spider):
                 self.logger.info('\n >> Retrieved date %s-%s-%s\n', date_y, date_m, date_d)
                 self.logger.info('\n >> Previous date %s\n', prev_date_str)
                 next_url = "https://aceh.tribunnews.com/index-news?date=" + prev_date_str
+                self.logger.info('\n >> PROCESSING in scrapy request %s\n', next_url)
                 yield scrapy.Request(next_url, callback=self.parse)
             else:
                 yield scrapy.Request(next_url, callback=self.parse)
@@ -54,8 +57,15 @@ class TribunAcehSpider(scrapy.Spider):
     def parse_news_page(self, response):
         self.logger.info('\n >> PROCESSING in parse_news_page %s\n', response.url)
         item = ItemNews()
-        item['title'] = response.xpath('//h1[@class="f50 black2 f400 crimson"]/text()').get()
+        item['title'] = response.xpath('//h1[@id="arttitle"]//text()').get()
         item['date'] = response.xpath('//time/text()').get()
         content = response.xpath('//div[@class="side-article txt-article"]//p//text()').getall()
         item['content']  = "".join(content)
+        #item['url']  = response.url
         yield item
+        
+        next_url = response.xpath('//div[@class="mb20"]/a/@href').get()
+        self.logger.info('\n >> PROCESSING in parse_news_page, next_url %s\n', next_url)
+        if None != next_url:
+            yield scrapy.Request(next_url, callback=self.parse_news_page)
+
