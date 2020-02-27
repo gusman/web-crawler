@@ -28,16 +28,17 @@ class TribunAcehSpider(scrapy.Spider):
         date_m = response.xpath('//select[@id="monthindex"]/option[boolean(@selected)]/@value').get()
         date_y = response.xpath('//select[@id="yearindex"]/option[boolean(@selected)]/@value').get()
 
+        self.logger.info('\n >> n_news : %d\n', n_news)
         if 0 < n_news:
             """ Scrap all news lsit """
-            self.logger.info('\n >> n_news : %d\n', n_news)
-            self.logger.info('\n >> next url : %s\n', next_url)
             news_urls = response.xpath('//ul[@class="lsi"]/li[@class="ptb15"]//a/@href');
             for news_url in news_urls:
                 """ Get news url """
+                self.logger.info('\n >> PROCESSING in parse_detail %s\n', response.url)
                 url = news_url.get()
                 yield scrapy.Request(url, callback=self.parse_news_page)
 
+            self.logger.info('\n >> next url : %s\n', next_url)
             if None == next_url:
                 """ Get previous date """
                 curr_date = datetime.datetime(int(date_y), int(date_m), int(date_d))
@@ -51,7 +52,7 @@ class TribunAcehSpider(scrapy.Spider):
                 yield scrapy.Request(next_url, callback=self.parse)
     
     def parse_news_page(self, response):
-        #self.logger.info('\n >> PROCESSING in parse_detail %s\n', response.url)
+        self.logger.info('\n >> PROCESSING in parse_news_page %s\n', response.url)
         item = ItemNews()
         item['title'] = response.xpath('//h1[@class="f50 black2 f400 crimson"]/text()').get()
         item['date'] = response.xpath('//time/text()').get()
