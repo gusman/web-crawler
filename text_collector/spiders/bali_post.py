@@ -12,12 +12,11 @@ class ItemNews(scrapy.Item):
 #    url = scrapy.Field()
 
 class TribunAcehSpider(scrapy.Spider):
-    last_date = '2019/03/05'
+    last_date = '2017/02/25'
     name = "bali_post"
     allowed_domains = [ 'balipost.com' ]
     start_urls = [
-        #'http://www.balipost.com/news/2019/02/29',
-        'http://www.balipost.com/news/2019/03/08',
+        'http://www.balipost.com/news/2020/03/01',
     ]
   
     def __init__(self,  *args, **kwargs):
