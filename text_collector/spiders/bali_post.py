@@ -71,7 +71,7 @@ class TribunAcehSpider(scrapy.Spider):
                 """ Get news url """
                 url = "http:" + news_url.get()
                 self.logger.info('>> Scrapy Request [News Content] %s', url)
-                #yield scrapy.Request(url, callback=self.parse_news_page)
+                yield scrapy.Request(url, callback=self.parse_news_page)
 
             self.logger.info('>> next url : %s', next_url)
             if None == next_url or '#' == next_url:
