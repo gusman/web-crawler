@@ -16,7 +16,7 @@ class TribunAcehSpider(scrapy.Spider):
     name = "bali_post"
     allowed_domains = [ 'balipost.com' ]
     start_urls = [
-        'http://www.balipost.com/news/2020/03/01',
+        'http://www.balipost.com/news/2018/03/16',
     ]
   
     def __init__(self,  *args, **kwargs):
