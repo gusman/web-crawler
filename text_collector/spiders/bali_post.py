@@ -11,7 +11,7 @@ class ItemNews(scrapy.Item):
     content = scrapy.Field()
 #    url = scrapy.Field()
 
-class TribunAcehSpider(scrapy.Spider):
+class BaliPostSpider(scrapy.Spider):
     last_date = '2017/02/25'
     name = "bali_post"
     allowed_domains = [ 'balipost.com' ]
