@@ -15,6 +15,7 @@ class TribunBaliSpider(scrapy.Spider):
     stop_flag = False
     name = "bali_tribun"
     allowed_domains = [ 'bali.tribunnews.com' ]
+    page_index_url = "https://bali.tribunnews.com/index-news?date="
     start_urls = [
         #'https://aceh.tribunnews.com',
         #'https://aceh.tribunnews.com/indeks',
@@ -48,7 +49,7 @@ class TribunBaliSpider(scrapy.Spider):
                 prev_date_str = prev_date.strftime("%Y-%m-%d")
                 self.logger.info('\n >> Retrieved date %s-%s-%s\n', date_y, date_m, date_d)
                 self.logger.info('\n >> Previous date %s\n', prev_date_str)
-                next_url = "https://aceh.tribunnews.com/index-news?date=" + prev_date_str
+                next_url = self.page_index_url + prev_date_str
                 self.logger.info('\n >> PROCESSING in scrapy request %s\n', next_url)
                 yield scrapy.Request(next_url, callback=self.parse)
             else:
