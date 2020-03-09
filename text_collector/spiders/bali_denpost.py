@@ -36,7 +36,7 @@ class DenpostSpider(CrawlSpider):
         self.logger.info('\n >> PROCESSING in parse_detail %s\n', response.url)
         item = ItemNews()
         item['title'] = response.xpath('//h1[@class="entry-title"]/text()').get()
-        item['date'] = response.xpath('//time[@class="entry-date updated td-module-date"]/text()').get()
+        item['date'] = response.xpath('//time[@class="entry-date updated td-module-date"]/@datetime').get()
         content = response.xpath('//article//*/p//text()').getall()
         item['content']  = "".join(content)
         yield item
