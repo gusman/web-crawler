@@ -8,7 +8,7 @@ class ItemNews(scrapy.Item):
     title = scrapy.Field()
     content = scrapy.Field()
 
-class JurnalSumbarSpider(CrawlSpider):
+class DenpostSpider(CrawlSpider):
     stop_flag = False
     name = "bali_denpost"
     allowed_domains = [ 'denpost.id' ]
