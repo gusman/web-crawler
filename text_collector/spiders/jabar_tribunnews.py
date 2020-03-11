@@ -46,7 +46,7 @@ class TribunJabarSpider(scrapy.Spider):
                 prev_date_str = prev_date.strftime("%Y-%m-%d")
                 self.logger.info('\n >> Retrieved date %s-%s-%s\n', date_y, date_m, date_d)
                 self.logger.info('\n >> Previous date %s\n', prev_date_str)
-                next_url = page_url + prev_date_str
+                next_url = self.page_url + prev_date_str
                 self.logger.info('\n >> PROCESSING in scrapy request %s\n', next_url)
                 yield scrapy.Request(next_url, callback=self.parse)
             else:
