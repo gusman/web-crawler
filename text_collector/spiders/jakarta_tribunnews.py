@@ -12,13 +12,10 @@ class ItemNews(scrapy.Item):
 #    url = scrapy.Field()
 
 class TribunJakartaSpider(scrapy.Spider):
-    stop_flag = False
     name = "jakarta_tribun"
     allowed_domains = [ 'jakarta.tribunnews.com' ]
     start_urls = [
-        #'https://aceh.tribunnews.com',
-        #'https://aceh.tribunnews.com/indeks',
-        'https://jakarta.tribunnews.com/index-news?date=2020-3-10'
+        'https://jakarta.tribunnews.com/index-news?date=2020-3-11'
     ]
     
     def parse(self, response):
