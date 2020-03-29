@@ -11,7 +11,7 @@ class ItemNews(scrapy.Item):
     content = scrapy.Field()
 
 class SultengRayaSpider(scrapy.Spider):
-    max_empty = 3
+    max_empty = 10 
     counter_empty = 0
     handle_httpstatus_list = [404]
     name = "sulteng_raya"
@@ -46,7 +46,7 @@ class SultengRayaSpider(scrapy.Spider):
                 self.logger.info('\n >> PROCESSING in scrapy request %s\n', url)
                 yield scrapy.Request(url, callback=self.parse_news_page)
         else:
-            self.logger.info("\n >> Found empty page, counter_empty: %d\n", self.counter_empty)
+            self.logger.info("\n >> Found empty page, url: %s, counter_empty: %d\n", response.url, self.counter_empty)
             self.counter_empty += 1
         
         if 3 > self.counter_empty:
