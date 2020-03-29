@@ -11,7 +11,7 @@ class ItemNews(scrapy.Item):
     content = scrapy.Field()
 
 class SultengRayaSpider(scrapy.Spider):
-    max_empty = 10 
+    max_empty = 120 
     counter_empty = 0
     handle_httpstatus_list = [404]
     name = "sulteng_raya"
