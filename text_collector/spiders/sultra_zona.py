@@ -11,6 +11,7 @@ class ItemNews(scrapy.Item):
     content = scrapy.Field()
 
 class SultraZonaSpider(scrapy.Spider):
+    handle_httpstatus_list = [404]
     max_empty = 3
     counter_empty = 0
     name = "sultra_zona"
@@ -37,6 +38,7 @@ class SultraZonaSpider(scrapy.Spider):
         self.logger.info('\n >> %s, %s, %s\n', date_y, date_m, date_d)
         if 0 < n_news:
             """ Scrap all news list """
+            self.counter_empty = 0
             news_urls = response.xpath('//div[@class="td-ss-main-content"]//h3[@class="entry-title td-module-title"]/a/@href');
             for news_url in news_urls:
                 """ Get news url """
@@ -45,6 +47,7 @@ class SultraZonaSpider(scrapy.Spider):
                 yield scrapy.Request(url, callback=self.parse_news_page)
 
         else:
+            self.logger.info("\n >> Found empty page, counter_empty: %d\n", self.counter_empty)
             self.counter_empty += 1
 
         if 3 > self.counter_empty:
