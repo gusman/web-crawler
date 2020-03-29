@@ -9,7 +9,7 @@ class ItemNews(scrapy.Item):
     title = scrapy.Field()
     content = scrapy.Field()
 
-class BatamPosSpider(CrawlSpider):
+class SumselSumeksSpider(CrawlSpider):
     name = 'sumsel_sumeks'
     allowed_domains = [ 'sumeks.co' ]
     start_urls = [
