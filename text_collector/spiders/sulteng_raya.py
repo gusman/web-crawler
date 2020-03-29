@@ -49,7 +49,7 @@ class SultengRayaSpider(scrapy.Spider):
             self.logger.info("\n >> Found empty page, url: %s, counter_empty: %d\n", response.url, self.counter_empty)
             self.counter_empty += 1
         
-        if 3 > self.counter_empty:
+        if self.max_empty > self.counter_empty:
             self.logger.info('\n >> next url : %s\n', next_url)
             if None == next_url:
                 """ Get previous date """

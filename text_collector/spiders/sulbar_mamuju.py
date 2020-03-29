@@ -12,6 +12,9 @@ class ItemNews(scrapy.Item):
     content = scrapy.Field()
 
 class SulbarMamujuSpider(scrapy.Spider):
+    max_empty = 10 
+    counter_empty = 0
+    handle_httpstatus_list = [404]
     name = "sulbar_mamuju"
     allowed_domains = [ 'mamujupos.com' ]
     page_url = 'https://mamujupos.com/'
@@ -38,6 +41,7 @@ class SulbarMamujuSpider(scrapy.Spider):
         self.logger.info('\n >> %s, %s, %s\n', date_y, date_m, date_d)
         if 0 < n_news:
             """ Scrap all news lsit """
+            self.counter_empty = 0
             news_urls = response.xpath('//section[@class="widget archive"]//div[@class="excrp"]//a/@href');
             for news_url in news_urls:
                 """ Get news url """
@@ -45,6 +49,12 @@ class SulbarMamujuSpider(scrapy.Spider):
                 self.logger.info('\n >> PROCESSING in scrapy request %s\n', url)
                 yield scrapy.Request(url, callback=self.parse_news_page)
 
+        else:
+            self.logger.info("\n >> Found empty page, url: %s, counter_empty: %d\n", response.url, self.counter_empty)
+            self.counter_empty += 1
+
+
+        if self.max_empty > self.counter_empty:
             self.logger.info('\n >> next url : %s\n', next_url)
             if None == next_url:
                 """ Get previous date """
@@ -58,6 +68,8 @@ class SulbarMamujuSpider(scrapy.Spider):
                 yield scrapy.Request(next_url, callback=self.parse)
             else:
                 yield scrapy.Request(next_url, callback=self.parse)
+        else:
+            self.logger.info("\n >> Reach end of index page : counter_empty: %d\n", self.counter_empty)
 
     def parse_news_page(self, response):
         self.logger.info('>> PROCESSING in parse_detail %s\n', response.url)
