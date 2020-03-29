@@ -9,8 +9,8 @@ class ItemNews(scrapy.Item):
     title = scrapy.Field()
     content = scrapy.Field()
 
-class BatamPosSpider(CrawlSpider):
-    name = 'papuabarat_jubi'
+class PapuaJubiSpider(CrawlSpider):
+    name = 'papua_jubi'
     allowed_domains = [ 'tabloidjubi.com' ]
     start_urls = [
         'https://tabloidjubi.com',
