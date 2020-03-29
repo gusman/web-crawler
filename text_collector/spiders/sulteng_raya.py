@@ -5,18 +5,20 @@ from datetime import timedelta
 from scrapy.spiders import CrawlSpider, Rule
 from scrapy.linkextractors import LinkExtractor
 
-
 class ItemNews(scrapy.Item):
     date = scrapy.Field()
     title = scrapy.Field()
     content = scrapy.Field()
 
 class SultengRayaSpider(scrapy.Spider):
+    max_empty = 3
+    counter_empty = 0
+    handle_httpstatus_list = [404]
     name = "sulteng_raya"
     allowed_domains = [ 'sultengraya.com' ]
     page_url = 'https://sultengraya.com/'
     start_urls = [
-        'https://sultengraya.com/2020/03/28/'
+        'https://sultengraya.com/2020/03/23/'
     ]
 
     def get_date_from_url(self, url):
@@ -42,7 +44,10 @@ class SultengRayaSpider(scrapy.Spider):
                 url = news_url.get()
                 self.logger.info('\n >> PROCESSING in scrapy request %s\n', url)
                 yield scrapy.Request(url, callback=self.parse_news_page)
-
+        else:
+            self.counter_empty += 1
+        
+        if 3 > self.counter_empty:
             self.logger.info('\n >> next url : %s\n', next_url)
             if None == next_url:
                 """ Get previous date """
@@ -56,6 +61,8 @@ class SultengRayaSpider(scrapy.Spider):
                 yield scrapy.Request(next_url, callback=self.parse)
             else:
                 yield scrapy.Request(next_url, callback=self.parse)
+        else:
+            self.logger.info("\n >> Reach end of index page : counter_empty: %d\n", self.counter_empty)
 
     def parse_news_page(self, response):
         self.logger.info('>> PROCESSING in parse_detail %s\n', response.url)
