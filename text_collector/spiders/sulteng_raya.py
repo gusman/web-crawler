@@ -37,6 +37,7 @@ class SultengRayaSpider(scrapy.Spider):
         self.logger.info('\n >> n_news : %d\n', n_news)
         self.logger.info('\n >> %s, %s, %s\n', date_y, date_m, date_d)
         if 0 < n_news:
+            self.counter_empty = 0
             """ Scrap all news list """
             news_urls = response.xpath('//div[@class="content-column"]//article//h2/a/@href');
             for news_url in news_urls:
@@ -45,6 +46,7 @@ class SultengRayaSpider(scrapy.Spider):
                 self.logger.info('\n >> PROCESSING in scrapy request %s\n', url)
                 yield scrapy.Request(url, callback=self.parse_news_page)
         else:
+            self.logger.info("\n >> Found empty page, counter_empty: %d\n", self.counter_empty)
             self.counter_empty += 1
         
         if 3 > self.counter_empty:
