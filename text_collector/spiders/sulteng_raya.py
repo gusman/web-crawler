@@ -18,7 +18,7 @@ class SultengRayaSpider(scrapy.Spider):
     allowed_domains = [ 'sultengraya.com' ]
     page_url = 'https://sultengraya.com/'
     start_urls = [
-        'https://sultengraya.com/2020/03/23/'
+        'https://sultengraya.com/2020/03/28/'
     ]
 
     def get_date_from_url(self, url):
