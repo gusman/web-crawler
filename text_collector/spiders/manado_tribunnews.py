@@ -16,7 +16,8 @@ class TribunJatengSpider(scrapy.Spider):
     allowed_domains = [ 'manado.tribunnews.com' ]
     page_url = 'https://manado.tribunnews.com/index-news?date='
     start_urls = [
-        'https://manado.tribunnews.com/index-news?date=2020-3-15&page=1'
+        #'https://manado.tribunnews.com/index-news?date=2020-3-15&page=1'
+        'https://manado.tribunnews.com/index-news?date=2014-09-05&page=1'
     ]
     
     def parse(self, response):
