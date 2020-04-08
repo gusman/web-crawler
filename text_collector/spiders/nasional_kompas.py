@@ -13,7 +13,7 @@ class ItemNews(scrapy.Item):
 class NasionalKompasSpider(scrapy.Spider):
     max_empty = 5 
     counter_empty = 0
-    handle_httpstatus_list = [404]
+    handle_httpstatus_list = [404, 502]
     name = "nasional_kompas"
     allowed_domains = [ 'kompas.com' ]
     start_urls = [
@@ -48,7 +48,9 @@ class NasionalKompasSpider(scrapy.Spider):
                 """ Get news url """
                 url = news_url.get()
                 self.logger.info('\n >> PROCESSING in scrapy request %s\n', url)
-                yield scrapy.Request(url, callback=self.parse_news_page)
+               
+                if 'tv.kompas' not in url:
+                    yield scrapy.Request(url, callback=self.parse_news_page)
         else:
             self.logger.info("\n >> Found empty page, url: %s, counter_empty: %d\n", response.url, self.counter_empty)
             self.counter_empty += 1
