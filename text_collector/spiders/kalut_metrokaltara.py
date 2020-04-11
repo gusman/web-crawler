@@ -36,7 +36,7 @@ class KalutMetrokaltaraSpider(CrawlSpider):
         self.logger.info('>> PROCESSING in parse_detail %s\n', response.url)
         item = ItemNews()
         item['title'] = response.xpath('//h1[@class="post-title single-post-title entry-title"]/text()').get()
-        item['date'] = response.xpath('//time[@class="entry-date published"]/@datetime').get()
+        item['date'] = response.xpath('//div[@class="post-box-meta-single"]//time[@class="entry-date published"]/@datetime').get()
         content = response.xpath('//div[@id="penci-post-entry-inner"]//p//text()').getall()
         item['content']  = "".join(content)
         yield item
