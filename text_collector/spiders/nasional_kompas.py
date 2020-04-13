@@ -17,7 +17,8 @@ class NasionalKompasSpider(scrapy.Spider):
     name = "nasional_kompas"
     allowed_domains = [ 'kompas.com' ]
     start_urls = [
-        'https://indeks.kompas.com/?site=all&date=2020-03-31&page=1'
+        'https://indeks.kompas.com/?site=all&date=2017-10-01&page=5',
+        #'https://indeks.kompas.com/?site=all&date=2020-03-31&page=1'
         #'https://money.kompas.com/read/2020/03/31/113546426/ada-virus-corona-seberapa-banyak-dana-darurat-yang-harus-dimiliki'
     ]
 
@@ -49,8 +50,11 @@ class NasionalKompasSpider(scrapy.Spider):
                 url = news_url.get()
                 self.logger.info('\n >> PROCESSING in scrapy request %s\n', url)
                
-                if 'tv.kompas' not in url:
+                try:
                     yield scrapy.Request(url, callback=self.parse_news_page)
+                except Exception as e:
+                    self.logger.info("\n Exception FAIL: \n")
+                    self.logger.info(str(e))
         else:
             self.logger.info("\n >> Found empty page, url: %s, counter_empty: %d\n", response.url, self.counter_empty)
             self.counter_empty += 1
